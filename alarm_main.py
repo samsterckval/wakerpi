@@ -64,9 +64,10 @@ if __name__ == "__main__":
             time.sleep(0.5)
             continue
 
-    while wakeup_time - datetime.datetime.now() > datetime.timedelta(0, 20):  # Wait for 10s before to start volume
-        print(f"Sleeping {wakeup_time - datetime.datetime.now()} seconds.")
-        time.sleep((wakeup_time - datetime.datetime.now()).seconds-20)
+    tsleep = (wakeup_time - datetime.datetime.now()).seconds - 20
+    print(f"Sleeping {tsleep} seconds.")
+    if tsleep > 0:
+        time.sleep(tsleep)
 
     print("Let's go")
 
