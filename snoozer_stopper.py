@@ -40,7 +40,6 @@ class SnoozerStoper(Thread):
             self.listener: keyboard.GlobalHotKeys = keyboard.GlobalHotKeys(self.hotkey_dict)
 
         elif "linux" in sys.platform:
-            self.PATH_TO_TMP = f"/run/user/{os.environ['UID']}/"
 
             if not os.path.exists(self.PATH_TO_TMP):
                 os.makedirs(self.PATH_TO_TMP)
