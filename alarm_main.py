@@ -21,7 +21,7 @@ if __name__ == "__main__":
     if datetime.date.today().weekday() >= 5:  # then it's a weekend, no wakeup then yet, since this is a test phase
         exit()
 
-    while wakeup_time - datetime.datetime.now() > datetime.timedelta(0, 30):
+    while wakeup_time - datetime.datetime.now() > datetime.timedelta(0, 50):
         print(wakeup_time - datetime.datetime.now())
         time.sleep(1)
 
@@ -64,20 +64,20 @@ if __name__ == "__main__":
             time.sleep(0.5)
             continue
 
-    while wakeup_time - datetime.datetime.now() > datetime.timedelta(0, 10):  # Wait for 10s before to start volume
+    while wakeup_time - datetime.datetime.now() > datetime.timedelta(0, 20):  # Wait for 10s before to start volume
         print(f"Sleeping {wakeup_time - datetime.datetime.now()} seconds.")
-        time.sleep((wakeup_time - datetime.datetime.now()).seconds)
+        time.sleep((wakeup_time - datetime.datetime.now()).seconds-20)
 
     print("Let's go")
 
-    interval = time.time()
+    interval = time.time() + 1
 
     while not snoozer_stopper.stop_pressed():
         time.sleep(0.2)
         if time.time() > interval:
             if vol < VOL_MAX:
                 vol += VOL_PER_SEC
-            interval = time.time()
+            interval = time.time() + 1
             player.audio_set_volume(vol)
 
     player.stop()
