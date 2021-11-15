@@ -25,7 +25,7 @@ class SnoozerStoper(Thread):
                                         "linux": "<shift>+w"}
 
     if "linux" in sys.platform:
-        PATH_TO_TMP = f"/run/user/{os.environ['UID']}/"
+        PATH_TO_TMP = f"/run/user/{os.getuid()}/"
         PATH_TO_SNOOZE = os.path.join(PATH_TO_TMP, "snooze")
         PATH_TO_STOP = os.path.join(PATH_TO_TMP, "stop")
 
