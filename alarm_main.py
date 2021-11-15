@@ -8,12 +8,14 @@ VOL_PER_SEC = 1
 VOL_START = 0
 VOL_MAX = 100
 
-now = datetime.datetime.now().time()
+now = datetime.datetime.now()
 
 if "linux" in sys.platform:
-    wakeup_time = datetime.datetime.combine(datetime.datetime.now(), datetime.time(hour=7, minute=20, second=0, microsecond=0))
+    wakeup_time = datetime.datetime.combine(now.date(), datetime.time(hour=7, minute=20, second=0, microsecond=0))
+    if (wakeup_time-now).days < 0:
+        wakeup_time += datetime.timedelta(days=abs((wakeup_time-now).days))
 else:
-    wakeup_time = now = datetime.datetime.now() + datetime.timedelta(minutes=1)
+    wakeup_time = now + datetime.timedelta(minutes=1)
 
 print(f"setting time for {wakeup_time}")
 
