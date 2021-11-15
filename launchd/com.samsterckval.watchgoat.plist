@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>Label</key>
+        <string>com.samsterckval.watchgoat</string>
+
+        <key>ProgramArguments</key>
+        <array>
+            <string>PATHTOEXECUTABLE</string>
+            <string>PATHTOURLS</string>
+            <string>PATHTOSECRETS</string>
+        </array>
+
+        <key>StartInterval</key>
+        <integer>60</integer>
+
+        <key>RunAtLoad</key>
+        <true/>
+
+        <key>StandardErrorPath</key>
+        <string>/tmp/com.samsterckval.watchgoat.err</string>
+
+        <key>StandardOutPath</key>
+        <string>/tmp/com.samsterckval.watchgoat.out</string>
+    </dict>
+</plist>

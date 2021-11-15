@@ -1,0 +1,6 @@
+[Unit]
+Description=WatchGoat
+
+[Service]
+Type=oneshot
+ExecStart=PATHTOEXECUTABLE
