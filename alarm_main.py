@@ -2,14 +2,18 @@ import vlc
 from snoozer_stopper import SnoozerStoper
 import time
 import datetime
+import sys
 
 VOL_PER_SEC = 1
 VOL_START = 0
 VOL_MAX = 100
 
-now = datetime.datetime.now()
+now = datetime.datetime.now().time()
 
-wakeup_time = datetime.datetime(now.year, now.month, now.day, now.hour, now.minute+1, now.second, now.microsecond)
+if "linux" in sys.platform:
+    wakeup_time = datetime.datetime.combine(datetime.datetime.now(), datetime.time(hour=23, minute=2, second=0, microsecond=0))
+else:
+    wakeup_time = now = datetime.datetime.now() + datetime.timedelta(minutes=1)
 
 print(f"setting time for {wakeup_time}")
 
