@@ -11,7 +11,7 @@ VOL_MAX = 100
 now = datetime.datetime.now().time()
 
 if "linux" in sys.platform:
-    wakeup_time = datetime.datetime.combine(datetime.datetime.now(), datetime.time(hour=23, minute=2, second=0, microsecond=0))
+    wakeup_time = datetime.datetime.combine(datetime.datetime.now(), datetime.time(hour=23, minute=7, second=0, microsecond=0))
 else:
     wakeup_time = now = datetime.datetime.now() + datetime.timedelta(minutes=1)
 
