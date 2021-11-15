@@ -24,7 +24,7 @@ def index():
             if "darwin" in sys.platform:
                 print("Stop")
             else:
-                with open(PATH_TO_SNOOZE, "w+") as f:
+                with open(PATH_TO_STOP, "w+") as f:
                     f.write("True")
                     f.truncate()
                     f.close()
