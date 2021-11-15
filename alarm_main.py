@@ -11,7 +11,7 @@ VOL_MAX = 100
 now = datetime.datetime.now()
 
 if "linux" in sys.platform:
-    wakeup_time = datetime.datetime.combine(now.date(), datetime.time(hour=7, minute=20, second=0, microsecond=0))
+    wakeup_time = datetime.datetime.combine(now.date(), datetime.time(hour=23, minute=29, second=0, microsecond=0))
     if (wakeup_time-now).days < 0:
         wakeup_time += datetime.timedelta(days=abs((wakeup_time-now).days))
 else:
