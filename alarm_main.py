@@ -28,7 +28,6 @@ if __name__ == "__main__":
     vol = VOL_START
     player = vlc.MediaPlayer()  # StuBru
     media = vlc.Media("http://icecast.vrtcdn.be/stubru.aac")
-    # player = vlc.MediaPlayer("data/creativeminds.mp3")  # backup song
     player.audio_set_volume(vol)
     player.set_media(media)
     player.play()
