@@ -59,6 +59,16 @@ class SnoozerStoper(Thread):
     def stop_pressed(self) -> bool:
         return self.stopped
 
+    def reset_stop(self):
+        with open(self.PATH_TO_STOP, "w+") as f:
+            f.write("False")
+            f.close()
+
+    def reset_snooze(self):
+        with open(self.PATH_TO_SNOOZE, "w+") as f:
+            f.write("False")
+            f.close()
+
     def _snooze(self) -> None:
         print("Snooze pressed")
         self.snoozed = True
