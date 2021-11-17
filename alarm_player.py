@@ -44,42 +44,43 @@ class AlarmPlayer(Thread):
 
         print("Alarm trying to buffer, let's see if it works")
 
-        timeout = time.time() + 15
+        fails = 0
         succes = False
 
-        while not self._stop.is_set() and time.time() < timeout:
-            state = self._player.get_state()
-            if state == vlc.State.Playing:
-                print(f"Playback on media {self._player.get_media()} started.")
-                succes = True
-                break
-            elif state == vlc.State.Opening:
-                print("Alarm still opening")
-                self._stop.wait(0.5)
-                continue
-            elif state == vlc.State.Ended:
-                print(f"Probably an error occured in media {self._player.get_media()}, going to backup song.")
-                self._player = vlc.MediaPlayer(self._backup_media)
+        while not self._stop.is_set() and fails < 4 and not succes:
+            fails += 1
+            timeout = time.time() + 5
+
+            while not self._stop.is_set() and time.time() < timeout:
+                state = self._player.get_state()
+
+                if state == vlc.State.Playing:
+                    print(f"Playback on media {self._player.get_media()} started.")
+                    succes = True
+                    break
+                elif state == vlc.State.Opening:
+                    print("Alarm still opening")
+                    self._stop.wait(0.5)
+                    continue
+                elif state == vlc.State.Ended:
+                    print(f"State = Ended; Probably an error occured in media {self._player.get_media()}, {'retrying' if fails < 4 else 'going to backup song'}")
+                    break
+                elif state == vlc.State.Buffering:
+                    print("Buffering")
+                    self._stop.wait(0.5)
+                    continue
+                elif state == vlc.State.Error:
+                    print(f"State = Error; Probably an error occured in media {self._player.get_media()}, {'retrying' if fails < 4 else 'going to backup song'}")
+                    break
+
+            if not succes:
+                self._player = vlc.MediaPlayer()
                 self._player.audio_set_volume(self._volume)
-                self._stop.wait(0.05)
+                self._player.set_media(self._media)
                 self._player.play()
-                self._stop.wait(0.5)
-                continue
-            elif state == vlc.State.Buffering:
-                print("Buffering")
-                self._stop.wait(0.5)
-                continue
-            elif state == vlc.State.Error:
-                print(f"An error occured in VLC, loading backup song")
-                self._player = vlc.MediaPlayer(self._backup_media)
-                self._player.audio_set_volume(self._volume)
-                self._stop.wait(0.05)
-                self._player.play()
-                self._stop.wait(0.5)
-                continue
 
         if not succes:
-            print("Something went wrong, loading backup song")
+            print("Loading backup song")
             self._player = vlc.MediaPlayer(self._backup_media)
             self._player.audio_set_volume(self._volume)
             self._stop.wait(0.05)
