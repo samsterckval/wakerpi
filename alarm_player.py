@@ -37,6 +37,10 @@ class AlarmPlayer(Thread):
         self._stop: Event = Event()
 
     def run(self) -> None:
+        """
+        Start this thread 60s before the alarm should go off
+        :return:
+        """
 
         target = time.time() + 60
 

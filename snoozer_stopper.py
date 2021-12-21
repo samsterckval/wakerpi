@@ -97,14 +97,14 @@ class SnoozerStoper(Thread):
             self.listener.start()
 
             while not self.stop_pressed():
-                time.sleep(0.2)
+                time.sleep(0.5)
 
             self.listener.stop()
             self.listener.join()
 
         elif "linux" in sys.platform:
             while not self.stop_pressed():
-                time.sleep(0.2)
+                time.sleep(0.5)
                 self.read_snooze()
                 self.read_stop()
 

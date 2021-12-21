@@ -1,9 +1,11 @@
 from snoozer_stopper import SnoozerStoper
 from alarm_player import AlarmPlayer
+from alarm import Alarm
 import time
 import datetime
 import sys
 import os
+from threading import Event
 
 now = datetime.datetime.now()
 
@@ -17,26 +19,29 @@ else:
 print(f"setting time for {wakeup_time}")
 
 if __name__ == "__main__":
-    if datetime.date.today().weekday() >= 5:  # then it's a weekend, no wakeup then yet, since this is a test phase
-        exit()
 
-    while wakeup_time - datetime.datetime.now() > datetime.timedelta(0, 60):
-        print(wakeup_time - datetime.datetime.now())
-        time.sleep(1)
-
-    print("Let's start the Alarm")
+    stop_event = Event()
 
     alarm_player = AlarmPlayer("http://icecast.vrtcdn.be/stubru.aac")
-    alarm_player.start()
 
-    snoozer_stopper = SnoozerStoper(snooze_time=600)
-    snoozer_stopper.start()
+    alarm = Alarm(stop_event=stop_event)
+    alarm.play_alarm_callback = alarm_player.start
+    alarm.set_on_days([0, 1, 2, 3, 4])
+    alarm.set_alarm_time(datetime.datetime.combine(datetime.datetime.now().date(),
+                                                   datetime.time(hour=7, minute=20, second=0, microsecond=0)))
+    # alarm.set_alarm_time(datetime.datetime.now() + datetime.timedelta(seconds=70))
+    alarm.start()
 
-    while not snoozer_stopper.stop_pressed():
-        time.sleep(0.5)
+    while not stop_event.is_set():
 
-    alarm_player.stop()
-    snoozer_stopper.join()
+        snoozer_stopper = SnoozerStoper(snooze_time=600)
+        snoozer_stopper.start()
+
+        while not snoozer_stopper.stop_pressed():
+            time.sleep(1)
+        alarm_player.stop()
+        snoozer_stopper.join()
+
     print("Main says bye")
 
     print("Alarm will restart")
