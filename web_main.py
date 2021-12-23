@@ -1,5 +1,18 @@
 from flask import Flask, render_template, request
-import os, sys
+import os
+import sys
+from threading import Thread, Event
+from alarm import Alarm
+from alarm_player import init_and_play
+import datetime
+import calendar
+
+
+stop_event = Event()
+
+alarm = Alarm(stop_event=stop_event)
+alarm.play_alarm_callback = init_and_play
+alarm.start()
 
 
 app = Flask(__name__)
@@ -29,11 +42,28 @@ def index():
                     f.truncate()
                     f.close()
         else:
-            print("unknown thing")
-    elif request.method == 'GET':
-        return render_template('main.html')
+            if request.form.get('set') == 'SET':
+                print(request.form)
+                on_days = []
+                for id, name in enumerate(list(calendar.day_name)):
+                    if request.form.get(name) == 'On':
+                        on_days.append(id)
 
-    return render_template("main.html")
+                alarm.set_on_days(on_days)
+
+                alarm_time_str = request.form.get('alarmTime')
+                if len(alarm_time_str) < 6:
+                    alarm.set_alarm_time(alarm=datetime.datetime.strptime(alarm_time_str, '%H:%M'))
+                else:
+                    alarm.set_alarm_time(alarm=datetime.datetime.strptime(alarm_time_str, '%H:%M:%S'))
+            else:
+                print("unknown thing")
+
+    return render_template('index.html',
+                           delta=alarm.get_next_alarm_str(),
+                           on_days=alarm.get_on_days(),
+                           day_name=enumerate(list(calendar.day_name)),
+                           alarm_time=alarm.get_alarm_time_str())
 
 
 if __name__ == "__main__":

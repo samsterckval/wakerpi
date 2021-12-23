@@ -56,6 +56,14 @@ class Alarm(Thread):
 
         return next_target
 
+    def get_next_alarm_str(self) -> str:
+        """
+        Get next alarm as string
+        :return: str
+        """
+
+        return self.get_next_alarm().strftime("%Y-%m-%d %H:%M:%S")
+
     def stop(self) -> None:
         """
         Attempt to stop the thread
@@ -70,7 +78,27 @@ class Alarm(Thread):
         :return: timedelta
         """
 
-        return self.get_next_alarm() - datetime.now()
+        delta: timedelta = self.get_next_alarm() - datetime.now()
+
+        # print(f"got alarm delta - {delta}")
+
+        return delta
+
+    def get_alarm_time(self) -> time:
+        """
+        get a time object with alarm time
+        :return: datetime.time
+        """
+
+        return self._target_time
+
+    def get_alarm_time_str(self) -> str:
+        """
+        Get alarm time as string
+        :return: str
+        """
+
+        return self._target_time.strftime("%H:%M:%S")
 
     def set_alarm_time(self, alarm: datetime) -> None:
         """
@@ -84,6 +112,14 @@ class Alarm(Thread):
 
         # Wake the thread so the sleep time can be updated
         self._wake_signal.set()
+
+    def get_on_days(self) -> List[int]:
+        """
+        Get the on_days list
+        :return: List[int]
+        """
+
+        return self._on_days
 
     def set_on_days(self, on_days: List[int]) -> None:
         """

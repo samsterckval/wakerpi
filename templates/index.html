@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" xmlns="http://www.w3.org/1999/html">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="page_type" content="np-template-header-footer-from-plugin">
+    <title>Alarm</title>
+    <link rel="stylesheet" href="static/nicepage.css" media="screen">
+<link rel="stylesheet" href="static/Main.css" media="screen">
+    <link rel="icon" href="static/icon.png">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
+
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "WakerPi",
+		"logo": "data/icon.png?rand=876a"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Main">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+  </head>
+  <body data-home-page-title="Alarm" class="u-body"><header class="u-clearfix u-header u-header" id="sec-6351"><div class="u-clearfix u-sheet u-valign-middle-xs u-sheet-1">
+        <img src="static/icon.png?rand=876a" class="u-logo-image u-logo-image-1">
+      </div></header>
+    <section class="u-align-center u-clearfix u-section-1" id="sec-df65">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+
+        {% if delta %}
+          <h1 class="u-text u-text-default u-text-1">{{ delta }}</h1>
+        {% else %}
+          <h1 class="u-text u-text-default u-text-1">???</h1>
+        {% endif %}
+
+      </div>
+    </section>
+    <section class="u-clearfix u-section-2" id="sec-386f">
+      <div class="u-clearfix u-sheet u-valign-middle-xs u-sheet-1">
+        <div class="u-expanded-width-xs u-form u-form-1">
+          <form action="/" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" name="form" style="padding: 10px;">
+            <input type="hidden" id="siteId" name="siteId" value="455826425">
+            <input type="hidden" id="pageId" name="pageId" value="42101064">
+            <div class="u-form-group u-form-group-1">
+              <label for="text-18ed" class="u-label">Tijd</label>
+              <input type="time" value="{{ alarm_time }}" id="text-18ed" name="alarmTime" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+            </div>
+
+
+              {% for id, name in day_name %}
+
+                <div class="u-form-checkbox u-form-group u-form-group-2">
+                  <input type="checkbox" id={{ id }} name={{ name }} value="On" {% if id in on_days %} checked {% endif %}>
+                  <label class="u-label">{{ name }}</label>
+                </div>
+
+              {% endfor %}
+
+
+            <div class="u-align-left u-form-group u-form-submit">
+              <input type="submit" value="SET" name="set" class="u-btn u-btn-submit u-button-style"/>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    
+    
+    <footer class="u-align-center u-clearfix u-footer u-palette-4-base u-footer" id="sec-b3d0"><div class="u-clearfix u-sheet u-valign-middle-xs u-sheet-1">
+        <p class="u-small-text u-text u-text-variant u-text-1">WakerPi by Sam Sterckval</p>
+      </div></footer>
+  </body>
+</html>
