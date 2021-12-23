@@ -5,8 +5,13 @@ from typing import List, Callable
 import calendar
 
 
-def dummy_alarm_print():
+def dummy_stop() -> None:
+    print("Dummy stop called")
+
+
+def dummy_alarm_print() -> Callable:
     print("Dummy alarm is going off!")
+    return dummy_stop
 
 
 class Alarm(Thread):
@@ -20,6 +25,10 @@ class Alarm(Thread):
             stop_event = Event()
         self._stop_event = stop_event
         self.play_alarm_callback: Callable = dummy_alarm_print
+        self.stop_alarm_callback: Callable = dummy_stop
+
+    def stop_alarm(self) -> None:
+        self.stop_alarm_callback()
 
     def get_next_alarm(self) -> datetime:
         """
@@ -115,7 +124,7 @@ class Alarm(Thread):
             if delta.total_seconds() < 60:
 
                 # Play the alarm
-                self.play_alarm_callback()
+                self.stop_alarm_callback = self.play_alarm_callback()
                 if self._stop_event.is_set():
                     break
                 self._wake_signal.wait(timeout=65)

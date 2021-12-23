@@ -1,5 +1,5 @@
 from snoozer_stopper import SnoozerStoper
-from alarm_player import AlarmPlayer
+from alarm_player import AlarmPlayer, init_and_play
 from alarm import Alarm
 import time
 import datetime
@@ -22,14 +22,14 @@ if __name__ == "__main__":
 
     stop_event = Event()
 
-    alarm_player = AlarmPlayer("http://icecast.vrtcdn.be/stubru.aac")
+    # alarm_player = AlarmPlayer("http://icecast.vrtcdn.be/stubru.aac")
 
     alarm = Alarm(stop_event=stop_event)
-    alarm.play_alarm_callback = alarm_player.start
+    alarm.play_alarm_callback = init_and_play
     alarm.set_on_days([0, 1, 2, 3, 4])
-    alarm.set_alarm_time(datetime.datetime.combine(datetime.datetime.now().date(),
-                                                   datetime.time(hour=7, minute=20, second=0, microsecond=0)))
-    # alarm.set_alarm_time(datetime.datetime.now() + datetime.timedelta(seconds=70))
+    # alarm.set_alarm_time(datetime.datetime.combine(datetime.datetime.now().date(),
+    #                                                datetime.time(hour=7, minute=20, second=0, microsecond=0)))
+    alarm.set_alarm_time(datetime.datetime.now() + datetime.timedelta(seconds=70))
     alarm.start()
 
     while not stop_event.is_set():
@@ -39,8 +39,11 @@ if __name__ == "__main__":
 
         while not snoozer_stopper.stop_pressed():
             time.sleep(1)
-        alarm_player.stop()
+        alarm.stop_alarm()
         snoozer_stopper.join()
+
+        time.sleep(1)
+        print(f"Delta to next alarm : {alarm.get_next_alarm_delta()}")
 
     print("Main says bye")
 
