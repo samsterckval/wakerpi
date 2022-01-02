@@ -37,10 +37,11 @@ def index():
             if "darwin" in sys.platform:
                 print("Stop")
             else:
-                with open(PATH_TO_STOP, "w+") as f:
-                    f.write("True")
-                    f.truncate()
-                    f.close()
+                alarm.stop()
+                # with open(PATH_TO_STOP, "w+") as f:
+                #     f.write("True")
+                #     f.truncate()
+                #     f.close()
         else:
             if request.form.get('set') == 'SET':
                 print(request.form)
