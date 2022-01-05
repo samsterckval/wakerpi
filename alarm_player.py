@@ -2,13 +2,6 @@ from threading import Thread, Event
 import vlc
 import time
 import math
-from typing import Callable
-
-
-def init_and_play() -> Callable:
-    player = AlarmPlayer("http://icecast.vrtcdn.be/stubru.aac")
-    player.start()
-    return player.stop
 
 
 class AlarmPlayer(Thread):
@@ -117,3 +110,9 @@ class AlarmPlayer(Thread):
 
     def stop(self):
         self._stop.set()
+
+
+def init_and_play() -> AlarmPlayer:
+    player = AlarmPlayer("http://icecast.vrtcdn.be/stubru.aac")
+    player.start()
+    return player

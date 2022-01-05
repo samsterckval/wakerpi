@@ -2,6 +2,7 @@ from threading import Thread, Event
 from datetime import datetime, timedelta, time
 import time as tm
 from typing import List, Callable
+from alarm_player import AlarmPlayer
 import calendar
 
 
@@ -9,9 +10,11 @@ def dummy_stop() -> None:
     print("Dummy stop called")
 
 
-def dummy_alarm_print() -> Callable:
+def dummy_alarm_print() -> AlarmPlayer:
     print("Dummy alarm is going off!")
-    return dummy_stop
+
+    tmp = AlarmPlayer("tmp")
+    return tmp
 
 
 class Alarm(Thread):
@@ -26,9 +29,17 @@ class Alarm(Thread):
         self._stop_event = stop_event
         self.play_alarm_callback: Callable = dummy_alarm_print
         self.stop_alarm_callback: Callable = dummy_stop
+        self.player: AlarmPlayer = dummy_alarm_print()
 
     def stop_alarm(self) -> None:
-        self.stop_alarm_callback()
+        if self.player is not None:
+            print("stopping player")
+            self.player.stop()
+            self._stop_event.set()
+            self._wake_signal.set()
+        else:
+            print("player unknown")
+            self.stop_alarm_callback()
 
     def get_next_alarm(self) -> datetime:
         """
@@ -160,9 +171,12 @@ class Alarm(Thread):
             if delta.total_seconds() < 60:
 
                 # Play the alarm
-                self.stop_alarm_callback = self.play_alarm_callback()
+                self.player = self.play_alarm_callback()
+                # self.stop_alarm_callback = self.play_alarm_callback()
+
                 if self._stop_event.is_set():
                     break
+
                 self._wake_signal.wait(timeout=65)
                 continue
 

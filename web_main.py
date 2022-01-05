@@ -37,7 +37,7 @@ def index():
             if "darwin" in sys.platform:
                 print("Stop")
             else:
-                alarm.stop()
+                alarm.stop_alarm()
                 # with open(PATH_TO_STOP, "w+") as f:
                 #     f.write("True")
                 #     f.truncate()
